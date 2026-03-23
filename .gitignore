@@ -1,5 +1,13 @@
-/node_modules
-*.yaml
-*.yml
-*.env
+node_modules
+package-lock.json
+.env
+yarn.lock
 *.log
+*.yaml
+*audit.json
+.DS_Store
+._*
+migrations
+migration.sql
+*.log.*
+dist
