@@ -9,10 +9,18 @@ const openai = new OpenAI({
 async function main() {
   const completion = await openai.chat.completions.create({
     model: "stepfun/step-3.5-flash:free",
-    messages: [{ role: "user", content: "What is agentic AI?" }],
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are an expart personal productivity coach and learning specialist. Create actionable and structured plans",
+      },
+      // { role: "user", content: "What is agentic AI?" },
+    ],
+    temperature: 0.7,
   });
 
-  console.log(completion.choices[0].message);
+  console.log(completion.choices[0].message.content);
 }
 
 main();
