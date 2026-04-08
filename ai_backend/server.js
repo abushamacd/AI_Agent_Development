@@ -10,6 +10,21 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// api endpoints
+app.post("/api/goals/", async (req, res) => {
+  try {
+    const { goalText, durationDays } = req.body;
+    if (!goalText || !durationDays) {
+      return res.status(400).json({ error: `Goal & Duration are required` });
+    }
+    const plan = await analyzeGoal(goalText, durationDays);
+
+    res.json(plan);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 // ============ SERVER START ============
 app.listen(PORT, () => {
   console.log(`🚀 AI Task Agent running on http://localhost:${PORT}`);
