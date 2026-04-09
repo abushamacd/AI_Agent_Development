@@ -2,6 +2,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const { analyzeGoal } = require("./ai-agents");
+const storage = require("./storage");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +21,20 @@ app.post("/api/goals/", async (req, res) => {
     }
     const plan = await analyzeGoal(goalText, durationDays);
 
+    const goal = storage.saveGoal({
+      title: goalText,
+      durationDays,
+      status: "active",
+      plan,
+    });
+
+    const task = storage.saveTasks(goal.id, goal.plan.dailyTasks);
+    storage.saveProgress(goal.id, {
+      goalId: goal.id,
+      completedTask: 0,
+      totalTask: task.length,
+      progressPercent: 0,
+    });
     res.json(plan);
   } catch (err) {
     console.error(err);
